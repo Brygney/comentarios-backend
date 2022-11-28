@@ -1,73 +1,48 @@
 const crypto = require('crypto');
+const boom = require('@hapi/boom');
+const { models }= require('./../libs/sequelize');
+
 
 
 class PagosService{
 
     constructor(){
-        this.pagos=[];
-        this.generate(10);
-
-    }
-
-    async generate(limite){
-        for (let index = 0; index < limite ; index ++)
-        this.pagos.push({
-                id: crypto.randomUUID(),
-                cliente: 'pagos' + index,
-                nombre: 'pagos' + index,
-                telefono: 10 + Math.floor(Math.random()*190),
-                monto: 10 + Math.floor(Math.random()*190)
-        })
 
     }
 
     async  create(data){
-    const nuevoPago = {
+      const nuevopago = {
         id: crypto.randomUUID(),
         ...data
       };
-      this.pagos.push(nuevoPago);
-      return nuevoPago;
+      const salida = await models.Comentario.create(nuevopago);
+      return salida;
+      }
 
-    }
 
     async find(){
-    return this.pagos;
+      const salida = await models.Pago.findAll();
+      return salida;
    }
 
+
    async findOne(id){
-    const pago = this.pagos.find((pago) => {
-      return pago.id === id;
-    });
+    const pago = await models.Pago.findByPk(id);
     if (!pago){
-      throw boom.notFound('Pago no encontrado');
-    }
-    return pago;
+       throw boom.notFound('Comentario no encontrado');
+     }
+     return pago;
   }
 
    async  update(id, changes){
-    const index = this.pagos.findIndex(pago =>{
-        return pago.id === id;
-      });
-      if (index === -1){
-        throw new Error('pago no encontrado');
-      }
-      const pago = this.pagos[index];
-      this.pagos[index] = {
-        ...pago,
-        ...changes
-      };
-      return this.pagos[index];
+    const pago = await this.findOne(id);
+    const salida = await pago.update(changes);
+    return salida;
    }
    async  delete(id){
-    const index = this.pagos.findIndex(pago =>{
-        return pago.id === id;
-      });
-      if (index === -1){
-        throw new Error('pago no encontrado');
-      }
-      this.pagos.splice(index,1);
-      return { id };
+    const pago = await this.findOne(id);
+    await pago.destroy();
+    return { id };
    }
   }
 

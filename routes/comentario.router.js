@@ -1,14 +1,8 @@
-const express = require ('express');
-const router = express.Router();
-
 const validatorHandler = require('../middlewares/validator.handler');
 const { getcomentarioSchema, createcomentarioSchema, updatecomentarioSchema } = require('../schemas/comentarios.schema');
 
 const PagoService = require('../services/comentarios.service')
 const service = new PagoService();
-
-
-
 
 router.get('/', async (req, res) => {
   const comentarios = await service.find();
@@ -46,7 +40,7 @@ router.patch('/:id',
   try {
     const { id } = req.params;
     const body = req.body;
-    const pago = await service.update(id, body);
+    const comentario = await service.update(id, body);
     res.status(200).json({
       message: 'actualizado',
       comentario

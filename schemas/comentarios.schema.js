@@ -6,12 +6,16 @@ const comentario = Joi.string()
                    //.alphanum()
                    .min(3)
                    .max(30);
+const idCliente = Joi.string()
+                   .uuid();
 const createcomentarioSchema = Joi.object({
-  comentario: comentario.required()
+  comentario: comentario.required(),
+  idCliente: idCliente.required()
 });
 
 const updatecomentarioSchema = Joi.object({
-  comentario: comentario
+  comentario: comentario,
+  idCliente: idCliente
 });
 
 const getcomentarioSchema = Joi.object({
@@ -19,6 +23,8 @@ const getcomentarioSchema = Joi.object({
 });
 
 module.exports = {createcomentarioSchema, updatecomentarioSchema, getcomentarioSchema};
+
+
 
 
 

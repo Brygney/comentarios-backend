@@ -3,7 +3,7 @@ const Joi = require('joi');
 const id = Joi.string()
               .uuid();
 const nombre = Joi.string()
-                   .alphanum()
+                   //.alphanum()
                    .min(3)
                    .max(15);
 const cliente = Joi.number()
